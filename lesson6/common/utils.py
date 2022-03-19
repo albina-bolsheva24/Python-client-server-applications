@@ -11,7 +11,12 @@ from decos import log
 
 @log
 def get_message(client):
-    
+    """
+    Утилита приёма и декодирования сообщенияпринимает байты выдаёт словарь,
+    если приняточто-то другое отдаёт ошибку значения
+    :param client:
+    :return:
+    """
     encoded_response = client.recv(MAX_PACKAGE_LENGTH)
     if isinstance(encoded_response, bytes):
         json_response = encoded_response.decode(ENCODING)
@@ -24,7 +29,13 @@ def get_message(client):
 
 @log
 def send_message(sock, message):
-   
+    """
+    Утилита кодирования и отправки сообщения
+    принимает словарь и отправляет его
+    :param sock:
+    :param message:
+    :return:
+    """
     if not isinstance(message, dict):
         raise NonDictInputError
     js_message = json.dumps(message)

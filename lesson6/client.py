@@ -10,17 +10,17 @@ import logs.config_client_log
 from common.variables import ACTION, TIME, USER, ACCOUNT_NAME, RESPONSE, \
     DEFAULT_IP_ADDRESS, DEFAULT_PORT, ERROR, PRESENCE
 from common.utils import get_message, send_message
-
+# from common.utils_for_log_as_class import get_message, send_message
 from errors import ReqFieldMissingError
 from decos import log
 
-
+# Инициализация клиентского логера
 LOGGER = logging.getLogger('client')
 
 
 @log
 def create_presence(account_name='Guest'):
-   
+    """Функция генерирует запрос о присутствии клиента"""
     out = {
         ACTION: PRESENCE,
         TIME: time.time(),
@@ -34,7 +34,7 @@ def create_presence(account_name='Guest'):
 
 @log
 def process_ans(message):
-    
+    """Функция разбирает ответ сервера"""
     LOGGER.debug(f'Разбор сообщения от сервера: {message}')
     if RESPONSE in message:
         if message[RESPONSE] == 200:
@@ -45,7 +45,7 @@ def process_ans(message):
 
 @log
 def create_arg_parser():
-    
+    """Создаём парсер аргументов коммандной строки"""
     parser = argparse.ArgumentParser()
     parser.add_argument('addr', default=DEFAULT_IP_ADDRESS, nargs='?')
     parser.add_argument('port', default=DEFAULT_PORT, type=int, nargs='?')
@@ -53,13 +53,13 @@ def create_arg_parser():
 
 
 def main():
-   
+    """Загружаем параметы коммандной строки"""
     parser = create_arg_parser()
     namespace = parser.parse_args(sys.argv[1:])
     server_address = namespace.addr
     server_port = namespace.port
 
-
+    # проверим подходящий номер порта
     if not 1023 < server_port < 65536:
         LOGGER.critical(
             f'Попытка запуска клиента с неподходящим номером порта: {server_port}. '
@@ -68,7 +68,7 @@ def main():
 
     LOGGER.info(f'Запущен клиент с парамертами: адрес сервера: '
                 f'{server_address}, порт: {server_port}')
-   
+    # Инициализация сокета и обмен
 
     try:
         transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

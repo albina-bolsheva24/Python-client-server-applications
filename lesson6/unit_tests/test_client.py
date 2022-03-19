@@ -8,12 +8,15 @@ from common.variables import RESPONSE, ERROR, USER, ACCOUNT_NAME, TIME, ACTION, 
 from client import create_presence, process_ans
 
 class TestClass(unittest.TestCase):
-    
+    '''
+    Класс с тестами
+    '''
 
     def test_def_presense(self):
-        
+        """Тест коректного запроса"""
         test = create_presence()
-        test[TIME] = 1.1  
+        test[TIME] = 1.1  # время необходимо приравнять принудительно
+                          # иначе тест никогда не будет пройден
         self.assertEqual(test, {ACTION: PRESENCE, TIME: 1.1, USER: {ACCOUNT_NAME: 'Guest'}})
 
     def test_200_ans(self):
