@@ -10,10 +10,10 @@ from errors import IncorrectDataRecivedError
 from common.variables import ACTION, USER, ACCOUNT_NAME, PRESENCE, \
     TIME, DEFAULT_PORT, MAX_CONNECTIONS, RESPONSE, ERROR
 from common.utils import get_message, send_message
-
+# from common.utils_for_log_as_class import get_message, send_message
 from decos import log
 
-
+# Инициализация логирования сервера.
 LOGGER = logging.getLogger('server')
 
 
@@ -51,7 +51,7 @@ def main():
     listen_address = namespace.a
     listen_port = namespace.p
 
-    
+    # проверка получения корретного номера порта для работы сервера.
     if not 1023 < listen_port < 65536:
         LOGGER.critical(f'Попытка запуска сервера с указанием неподходящего порта {listen_port}. '
                         f'Допустимы адреса с 1024 до 65535.')
@@ -59,13 +59,13 @@ def main():
     LOGGER.info(f'Запущен сервер, порт для подключений: {listen_port}, адрес,'
                 f' с которого принимаются подключения: {listen_address}. '
                 f'Если адрес не указан, принимаются соединения с любых адресов.')
-    
+    # Готовим сокет
 
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     transport.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     transport.bind((listen_address, listen_port))
 
-
+    # Слушаем порт
 
     transport.listen(MAX_CONNECTIONS)
 
